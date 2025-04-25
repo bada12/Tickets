@@ -1,0 +1,10 @@
+﻿using Tickets.Domain.Enums;
+
+namespace Tickets.API.Models
+{
+    public record SeatInput(
+        Guid EventId,
+        Guid SeatId,
+        PriceLevelEnum PriceLevel,
+        Guid UserId);
+}

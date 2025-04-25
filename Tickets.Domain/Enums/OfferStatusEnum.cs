@@ -8,6 +8,8 @@
 
         Declined = 2,
 
-        Paid = 3
+        Failed = 3,
+
+        Paid = 4
     }
 }

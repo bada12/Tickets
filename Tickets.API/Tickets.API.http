@@ -1,0 +1,54 @@
+@Tickets.API_HostAddress = http://localhost:5256
+
+GET {{Tickets.API_HostAddress}}/venues
+Accept: application/json
+###
+
+GET {{Tickets.API_HostAddress}}/venues/0b126c75-26e9-43ee-9574-37b0b2e7d8d1/sections
+Accept: application/json
+###
+
+GET {{Tickets.API_HostAddress}}/events
+Accept: application/json
+###
+
+GET {{Tickets.API_HostAddress}}/events/f967bee3-2dc1-4c3e-867a-7bf752b44463/sections/eadcb033-0a4f-43be-80d8-74eb1a9c7bb6/seats
+Accept: application/json
+###
+
+POST {{Tickets.API_HostAddress}}/orders/carts/ed68dafa-992d-44bd-b817-9b6edb302d49
+Content-Type: application/json
+Accept-Language: en-US,en;q=0.5
+Accept: application/json
+
+{
+  "EventId": "f967bee3-2dc1-4c3e-867a-7bf752b44461",
+  "SeatId": "a8da8a6b-8a73-4af3-995d-000000000000",
+  "PriceLevel": "Adult",
+  "UserId": "9d54ee29-d628-4585-8047-6a55835aa7e1"
+}
+###
+
+GET {{Tickets.API_HostAddress}}/orders/carts/ed68dafa-992d-44bd-b817-9b6edb302d49
+Accept: application/json
+###
+
+DELETE {{Tickets.API_HostAddress}}/orders/carts/ed68dafa-992d-44bd-b817-9b6edb302d49/events/f967bee3-2dc1-4c3e-867a-7bf752b44461/seats/a8da8a6b-8a73-4af3-995d-000000000000
+Accept: application/json
+### 
+
+PUT {{Tickets.API_HostAddress}}/orders/carts/ed68dafa-992d-44bd-b817-9b6edb302d49/book
+Accept: application/json
+### 
+
+GET {{Tickets.API_HostAddress}}/payments/ed68dafa-992d-44bd-b817-9b6edb302d49
+Accept: application/json
+###
+
+POST {{Tickets.API_HostAddress}}/payments/ed68dafa-992d-44bd-b817-9b6edb302d49/complete
+Accept: application/json
+###
+
+POST {{Tickets.API_HostAddress}}/payments/ed68dafa-992d-44bd-b817-9b6edb302d49/fail
+Accept: application/json
+###

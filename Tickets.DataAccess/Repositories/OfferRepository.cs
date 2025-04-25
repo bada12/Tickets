@@ -34,15 +34,19 @@ namespace Tickets.DataAccess.Repositories
         public async Task<Paged<Offer>> GetByUserIdAsync(Guid userId, int pageIndex, int pageSize)
         {
             Paged<Offer> offers = await _dbContext.Offers
+                .AsNoTracking()
                 .Where(o => o.UserId == userId)
+                .OrderByDescending(o => o.Timestamp)
                 .GetPaginatedDataAsync(pageIndex, pageSize);
 
             return offers;
         }
 
-        public async Task<Offer> GetByIdAsync(Guid offerId)
+        public async Task<Offer> GetAsync(Guid offerId)
         {
-            Offer offer = await _dbContext.Offers.GetFirstOrThrowExceptionAsync(o => o.Id == offerId);
+            Offer offer = await _dbContext.Offers
+                .Include(o => o.Seats)
+                .FirstOrDefaultAsync(o => o.Id == offerId);
             return offer;
         }
 

@@ -39,7 +39,10 @@ namespace Tickets.DataAccess.Repositories
 
         public async Task<Paged<Event>> GetAsync(int pageIndex, int pageSize)
         {
-            Paged<Event> events = await _dbContext.Events.GetPaginatedDataAsync(pageIndex, pageSize);
+            Paged<Event> events = await _dbContext.Events
+                .AsNoTracking()
+                .OrderByDescending(e => e.StartTime)
+                .GetPaginatedDataAsync(pageIndex, pageSize);
             return events;
         }
 

@@ -11,7 +11,7 @@ namespace Tickets.Domain.Interfaces
 
         Task DeleteAsync(Guid offerId);
 
-        Task<Offer> GetByIdAsync(Guid offerId);
+        Task<Offer> GetAsync(Guid offerId);
 
         Task<Paged<Offer>> GetByUserIdAsync(Guid customerId, int pageIndex, int pageSize);
     }

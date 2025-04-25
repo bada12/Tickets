@@ -28,6 +28,7 @@ namespace Tickets.DataAccess.Configurations
                     ,N'{OfferStatusEnum.Sent}'
                     ,N'{OfferStatusEnum.Paid}'
                     ,N'{OfferStatusEnum.Declined}'
+                    ,N'{OfferStatusEnum.Failed}'
                 )")
             );
         }

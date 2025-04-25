@@ -4,20 +4,89 @@ namespace Tickets.Domain.Entities
 {
     public class Offer
     {
-        public Guid Id { get; set; }
+        public Offer(
+            Guid id,
+            Guid userId,
+            DateTime timestamp)
+        {
+            Id = id;
+            UserId = userId;
+            Timestamp = timestamp;
+        }
 
-        public Guid UserId { get; set; }
+        public Guid Id { get; private set; }
 
-        public DateTime Timestamp { get; set; }
+        public Guid UserId { get; private set; }
 
-        public decimal TotalAmount { get; set; }
+        public DateTime Timestamp { get; private set; }
 
-        public OfferStatusEnum Status { get; set; }
+        public decimal TotalAmount { get; private set; }
 
-        public double? Discount { get; set; }
+        public OfferStatusEnum Status { get; private set; }
 
-        public User User { get; set; }
+        public double? Discount { get; private set; }
 
-        public ICollection<Seat> Seats { get; set; }
+        public User User { get; private set; }
+
+        public ICollection<Seat> Seats { get; private set; } = new List<Seat>();
+
+        public void TryToDeleteSeat(Guid seatId)
+        {
+            Seat seat = Seats?.SingleOrDefault(s => s.Id == seatId);
+            if (seat is null)
+            {
+                return;
+            }
+
+            seat.SetOfferId(null);
+            Seats.Remove(seat);
+
+            RecalculateTotalAmount();
+        }
+
+        public void BookSeats()
+        {
+            foreach (Seat seat in Seats)
+            {
+                seat.Book();
+            }
+        }
+
+        public void AddSeat(
+            Seat seat,
+            PriceLevel priceLevel)
+        {
+            seat.SetOfferId(Id);
+            seat.SetPriceLevel(priceLevel);
+
+            Seats.Add(seat);
+
+            RecalculateTotalAmount();
+        }
+
+        public void CompletePayment()
+        {
+            foreach (Seat seat in Seats)
+            {
+                seat.SetPurchasedStatus();
+            }
+
+            Status = OfferStatusEnum.Paid;
+        }
+
+        public void FailPayment()
+        {
+            foreach (Seat seat in Seats)
+            {
+                seat.SetAvailableStatus();
+            }
+
+            Status = OfferStatusEnum.Failed;
+        }
+
+        private void RecalculateTotalAmount()
+        {
+            TotalAmount = Seats.Sum(s => s.Price * (decimal)s.LevelPrice.PriceMultiplier);
+        }
     }
 }

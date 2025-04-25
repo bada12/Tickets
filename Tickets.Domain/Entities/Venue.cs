@@ -2,16 +2,28 @@
 {
     public class Venue
     {
-        public Guid Id { get; set; }
+        public Venue(
+            Guid id,
+            Guid eventId,
+            string spotName,
+            string address)
+        {
+            Id = id;
+            EventId = eventId;
+            SpotName = spotName;
+            Address = address;
+        }
 
-        public Guid EventId { get; set; }
+        public Guid Id { get; private set; }
 
-        public string SpotName { get; set; }
+        public Guid EventId { get; private set; }
 
-        public string Address { get; set; }
+        public string SpotName { get; private set; }
 
-        public Event Event { get; set; }
+        public string Address { get; private set; }
 
-        public ICollection<Section> Sections { get; set; }
+        public Event Event { get; private set; }
+
+        public ICollection<Section> Sections { get; private set; }
     }
 }

@@ -4,10 +4,22 @@ namespace Tickets.Domain.Entities
 {
     public class PriceLevel
     {
-        public PriceLevelEnum Level { get; set; }
+        public PriceLevel()
+        {
+        }
 
-        public double PriceMultiplier { get; set; }
+        public PriceLevel(
+            PriceLevelEnum priceLevel,
+            double priceMultiplier)
+        {
+            Level = priceLevel;
+            PriceMultiplier = priceMultiplier;
+        }
 
-        public ICollection<Seat> Seats { get; set; }
+        public PriceLevelEnum Level { get; private set; }
+
+        public double PriceMultiplier { get; private set; }
+
+        public ICollection<Seat> Seats { get; private set; }
     }
 }

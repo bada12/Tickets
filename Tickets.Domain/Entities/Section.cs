@@ -2,14 +2,24 @@
 {
     public class Section
     {
-        public Guid Id { get; set; }
+        public Section(
+            Guid id,
+            Guid venueId,
+            string name)
+        {
+            Id = id;
+            VenueId = venueId;
+            Name = name;
+        }
 
-        public Guid VenueId { get; set; }
+        public Guid Id { get; private set; }
 
-        public string Name { get; set; }
+        public Guid VenueId { get; private set; }
 
-        public Venue Venue { get; set; }
+        public string Name { get; private set; }
 
-        public ICollection<Row> Rows { get; set; }
+        public Venue Venue { get; private set; }
+
+        public ICollection<Row> Rows { get; private set; }
     }
 }

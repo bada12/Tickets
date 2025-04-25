@@ -36,6 +36,30 @@ namespace Tickets.DataAccess
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(TicketsDbContext).Assembly);
+
+            modelBuilder.Entity<PriceLevel>()
+                .HasData(DataGenerator.PriceLevels);
+
+            modelBuilder.Entity<User>()
+                .HasData(DataGenerator.Users);
+
+            modelBuilder.Entity<Manager>()
+                .HasData(DataGenerator.Managers);
+
+            modelBuilder.Entity<Event>()
+                .HasData(DataGenerator.Events);
+
+            modelBuilder.Entity<Venue>()
+                .HasData(DataGenerator.Venues);
+
+            modelBuilder.Entity<Section>()
+                .HasData(DataGenerator.Sections);
+
+            modelBuilder.Entity<Row>()
+                .HasData(DataGenerator.Rows);
+
+            modelBuilder.Entity<Seat>()
+                .HasData(DataGenerator.Seats);
         }
     }
 }

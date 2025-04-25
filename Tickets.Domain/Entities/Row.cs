@@ -2,12 +2,24 @@
 {
     public class Row
     {
-        public Guid Id { get; set; }
+        public Row(
+            Guid id,
+            int? number,
+            Guid sectionId)
+        {
+            Id = id;
+            Number = number;
+            SectionId = sectionId;
+        }
 
-        public int? Number { get; set; }
+        public Guid Id { get; private set; }
 
-        public Guid SectionId { get; set; }
+        public int? Number { get; private set; }
 
-        public ICollection<Seat> Seats { get; set; }
+        public Guid SectionId { get; private set; }
+
+        public Section Section { get; private set; }
+
+        public ICollection<Seat> Seats { get; private set; }
     }
 }
