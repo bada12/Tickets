@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tickets.API.Models;
+using Tickets.API.Services;
 using Tickets.Domain.Common;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;
@@ -11,33 +13,37 @@ namespace Tickets.API.Controllers
     {
         private readonly IVenueRepository _venueRepository;
         private readonly ISectionRepository _sectionRepository;
+        private readonly IValidatorService _validatorService;
 
         public VenuesController(
             IVenueRepository venueRepository,
-            ISectionRepository sectionRepository)
+            ISectionRepository sectionRepository,
+            IValidatorService validatoService)
         {
             _venueRepository = venueRepository ??
                 throw new ArgumentNullException(nameof(venueRepository));
 
             _sectionRepository = sectionRepository ??
                 throw new ArgumentNullException(nameof(sectionRepository));
+
+            _validatorService = validatoService ??
+                throw new ArgumentNullException(nameof(validatoService));
         }
 
         [HttpGet]
-        public async Task<Paged<Venue>> GetVenuesAsync(
-            int? pageIndex = null,
-            int? pageSize = null)
+        public async Task<Paged<Venue>> GetVenuesAsync(PaginationInput input)
         {
-            return await _venueRepository.GetAsync(pageIndex ?? 1, pageSize ?? 1);
+            await _validatorService.ValidateAsync(input);
+
+            return await _venueRepository.GetAsync(input.PageIndex, input.PageSize);
         }
 
         [HttpGet("{venueid}/sections")]
-        public async Task<Paged<Section>> GetSectionsByVenueIdAsync(
-            Guid venueId,
-            int? pageIndex = null,
-            int? pageSize = null)
+        public async Task<Paged<Section>> GetSectionsByVenueIdAsync(GetSectionsByVenueInput input)
         {
-            return await _sectionRepository.GetAsync(venueId, pageIndex ?? 1, pageSize ?? 1);
+            await _validatorService.ValidateAsync(input);
+
+            return await _sectionRepository.GetAsync(input.VenueId, input.Pagination.PageIndex, input.Pagination.PageSize);
         }
     }
 }

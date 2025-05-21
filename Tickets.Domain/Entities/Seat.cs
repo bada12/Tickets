@@ -14,8 +14,8 @@ namespace Tickets.Domain.Entities
             Number = number;
             RowId = rowId;
             Price = price;
-            PriceLevel = PriceLevelEnum.Adult;
-            Status = SeatStatusEnum.Available;
+            PriceLevel = Enums.PriceLevel.Adult;
+            Status = SeatStatus.Available;
         }
 
         public Guid Id { get; private set; }
@@ -26,9 +26,9 @@ namespace Tickets.Domain.Entities
 
         public decimal Price { get; private set; }
 
-        public PriceLevelEnum PriceLevel { get; private set; }
+        public Enums.PriceLevel PriceLevel { get; private set; }
 
-        public SeatStatusEnum Status { get; private set; }
+        public SeatStatus Status { get; private set; }
 
         public Guid? OfferId { get; private set; }
 
@@ -40,7 +40,7 @@ namespace Tickets.Domain.Entities
 
         internal void Book()
         {
-            Status = SeatStatusEnum.Booked;
+            Status = SeatStatus.Booked;
         }
 
         internal void SetOfferId(Guid? id)
@@ -56,12 +56,12 @@ namespace Tickets.Domain.Entities
 
         internal void SetPurchasedStatus()
         {
-            Status = SeatStatusEnum.Purchased;
+            Status = SeatStatus.Purchased;
         }
 
         internal void SetAvailableStatus()
         {
-            Status = SeatStatusEnum.Available;
+            Status = SeatStatus.Available;
         }
     }
 }

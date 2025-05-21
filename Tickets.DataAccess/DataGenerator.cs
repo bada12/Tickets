@@ -17,7 +17,7 @@ namespace Tickets.DataAccess
             Seats = GetSeats().ToList();
         }
 
-        public static List<PriceLevel> PriceLevels { get; }
+        public static List<Domain.Entities.PriceLevel> PriceLevels { get; }
 
         public static List<User> Users { get; }
 
@@ -33,13 +33,13 @@ namespace Tickets.DataAccess
 
         public static List<Seat> Seats { get; }
 
-        private static IEnumerable<PriceLevel> GetPriceLevels()
+        private static IEnumerable<Domain.Entities.PriceLevel> GetPriceLevels()
         {
-            yield return new PriceLevel(PriceLevelEnum.Child, 0.8);
+            yield return new Domain.Entities.PriceLevel(Domain.Enums.PriceLevel.Child, 0.8);
 
-            yield return new PriceLevel(PriceLevelEnum.Adult, 1);
+            yield return new Domain.Entities.PriceLevel(Domain.Enums.PriceLevel.Adult, 1);
 
-            yield return new PriceLevel(PriceLevelEnum.VIP, 1.25);
+            yield return new Domain.Entities.PriceLevel(Domain.Enums.PriceLevel.VIP, 1.25);
         }
 
         private static IEnumerable<User> GetUsers()

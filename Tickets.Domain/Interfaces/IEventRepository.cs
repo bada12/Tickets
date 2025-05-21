@@ -15,6 +15,6 @@ namespace Tickets.Domain.Interfaces
 
         Task<Event> GetByIdAsync(Guid eventId);
 
-        Task<Paged<Event>> GetAsync(int pageIndex, int pageSize);
+        Task<Paged<Event>> GetAsync(int? pageIndex, int? pageSize);
     }
 }

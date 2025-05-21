@@ -22,7 +22,7 @@ namespace Tickets.Domain.Entities
 
         public decimal TotalAmount { get; private set; }
 
-        public OfferStatusEnum Status { get; private set; }
+        public OfferStatus Status { get; private set; }
 
         public double? Discount { get; private set; }
 
@@ -71,7 +71,7 @@ namespace Tickets.Domain.Entities
                 seat.SetPurchasedStatus();
             }
 
-            Status = OfferStatusEnum.Paid;
+            Status = OfferStatus.Paid;
         }
 
         public void FailPayment()
@@ -81,7 +81,7 @@ namespace Tickets.Domain.Entities
                 seat.SetAvailableStatus();
             }
 
-            Status = OfferStatusEnum.Failed;
+            Status = OfferStatus.Failed;
         }
 
         private void RecalculateTotalAmount()

@@ -34,17 +34,17 @@ namespace Tickets.DataAccess.Configurations
 
             builder.ToTable(_ =>
                 _.HasCheckConstraint("CK_Status", @$"[Status] IN (
-                    N'{SeatStatusEnum.Available}'
-                    ,N'{SeatStatusEnum.Booked}'
-                    ,N'{SeatStatusEnum.Purchased}'
+                    N'{SeatStatus.Available}'
+                    ,N'{SeatStatus.Booked}'
+                    ,N'{SeatStatus.Purchased}'
                 )")
             );
 
             builder.ToTable(_ =>
                 _.HasCheckConstraint("CK_PriceLevel", @$"[PriceLevel] IN (
-                    N'{PriceLevelEnum.Adult}'
-                    ,N'{PriceLevelEnum.Child}'
-                    ,N'{PriceLevelEnum.VIP}'
+                    N'{Domain.Enums.PriceLevel.Adult}'
+                    ,N'{Domain.Enums.PriceLevel.Child}'
+                    ,N'{Domain.Enums.PriceLevel.VIP}'
                 )")
             );
         }

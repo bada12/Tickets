@@ -37,7 +37,7 @@ namespace Tickets.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Paged<Event>> GetAsync(int pageIndex, int pageSize)
+        public async Task<Paged<Event>> GetAsync(int? pageIndex, int? pageSize)
         {
             Paged<Event> events = await _dbContext.Events
                 .AsNoTracking()

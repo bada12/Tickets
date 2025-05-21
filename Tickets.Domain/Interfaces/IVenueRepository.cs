@@ -5,6 +5,6 @@ namespace Tickets.Domain.Interfaces
 {
     public interface IVenueRepository
     {
-        Task<Paged<Venue>> GetAsync(int pageIndex, int pageSize);
+        Task<Paged<Venue>> GetAsync(int? pageIndex, int? pageSize);
     }
 }

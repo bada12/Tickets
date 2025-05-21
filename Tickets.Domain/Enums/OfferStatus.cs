@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Domain.Enums
 {
-    public enum OfferStatusEnum
+    public enum OfferStatus
     {
         Created = 0,
 

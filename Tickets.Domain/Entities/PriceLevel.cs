@@ -9,14 +9,14 @@ namespace Tickets.Domain.Entities
         }
 
         public PriceLevel(
-            PriceLevelEnum priceLevel,
+            Enums.PriceLevel priceLevel,
             double priceMultiplier)
         {
             Level = priceLevel;
             PriceMultiplier = priceMultiplier;
         }
 
-        public PriceLevelEnum Level { get; private set; }
+        public Enums.PriceLevel Level { get; private set; }
 
         public double PriceMultiplier { get; private set; }
 

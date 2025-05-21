@@ -1,4 +1,7 @@
+using FluentValidation;
 using System.Text.Json.Serialization;
+using Tickets.API.ModelsValidators;
+using Tickets.API.Services;
 using Tickets.DataAccess.Extensions;
 
 namespace Tickets.API
@@ -12,6 +15,10 @@ namespace Tickets.API
             // Add services to the container.
 
             builder.Services.ConfigureTicketsDbContext(builder.Configuration);
+
+            builder.Services.AddValidatorsFromAssemblyContaining<GetCartInputValidator>(lifetime: ServiceLifetime.Singleton);
+
+            builder.Services.AddSingleton<IValidatorService, ValidatorService>();
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>

@@ -7,17 +7,24 @@ namespace Tickets.DataAccess.Extensions
 {
     public static class QueryableExtensions
     {
+        private const int DefaultPageIndex = 1;
+        private const int DefaultPageSize = 10;
+
         public static async Task<Paged<TEntity>> GetPaginatedDataAsync<TEntity>(
             this IQueryable<TEntity> query,
-            int pageIndex,
-            int pageSize)
+            int? pageIndex = null,
+            int? pageSize = null)
             where TEntity : class
         {
+            pageIndex ??= DefaultPageIndex;
+            pageSize ??= DefaultPageSize;
+
             int totalCount = await query.CountAsync();
-            IEnumerable<TEntity> entities = await query.Skip((pageIndex - 1) * pageSize).ToListAsync();
+            IEnumerable<TEntity> entities = await query.Skip((pageIndex.Value - 1) * pageSize.Value).ToListAsync();
+
             Paged<TEntity> paged = Paged<TEntity>.Create(
-                pageIndex,
-                pageSize,
+                pageIndex.Value,
+                pageSize.Value,
                 totalCount,
                 entities);
 

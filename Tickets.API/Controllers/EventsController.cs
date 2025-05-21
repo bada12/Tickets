@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tickets.API.Models;
+using Tickets.API.Services;
 using Tickets.Domain.Common;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;
@@ -11,34 +13,42 @@ namespace Tickets.API.Controllers
     {
         private readonly IEventRepository _eventRepository;
         private readonly ISectionRepository _sectionRepoisotory;
+        private readonly IValidatorService _validatorService;
 
         public EventsController(
             IEventRepository eventRepository,
-            ISectionRepository sectionRepository)
+            ISectionRepository sectionRepository,
+            IValidatorService validatorService)
         {
             _eventRepository = eventRepository ??
                 throw new ArgumentNullException(nameof(eventRepository));
 
             _sectionRepoisotory = sectionRepository ??
                 throw new ArgumentNullException(nameof(sectionRepository));
+
+            _validatorService = validatorService ??
+                throw new ArgumentNullException(nameof(validatorService));
         }
 
         [HttpGet]
         public async Task<Paged<Event>> GetEventsAsync(
-            int? pageIndex = null,
-            int? pageSize = null)
+            PaginationInput input)
         {
-            return await _eventRepository.GetAsync(pageIndex ?? 1, pageSize ?? 1);
+            await _validatorService.ValidateAsync(input);
+
+            return await _eventRepository.GetAsync(input.PageIndex, input.PageSize);
         }
 
         [HttpGet("{eventId}/sections/{sectionId}/seats")]
         public async Task<Paged<Seat>> GetSeatsInSectionsAsync(
-            Guid eventId,
-            Guid sectionId,
-            int? pageIndex = null,
-            int? pageSize = null)
+            GetSeatsInSectionsInput input)
         {
-            return await _sectionRepoisotory.GetSeatsAsync(sectionId, pageIndex ?? 1, pageSize ?? 1);
+            await _validatorService.ValidateAsync(input);
+
+            return await _sectionRepoisotory.GetSeatsAsync(
+                input.SectionId,
+                input.Pagination.PageIndex,
+                input.Pagination.PageSize);
         }
     }
 }

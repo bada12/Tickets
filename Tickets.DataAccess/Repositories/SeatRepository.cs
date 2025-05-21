@@ -21,9 +21,9 @@ namespace Tickets.DataAccess.Repositories
             return seat;
         }
 
-        public async Task<PriceLevel> GetPriceLevelAsync(PriceLevelEnum priceLevel)
+        public async Task<Domain.Entities.PriceLevel> GetPriceLevelAsync(Domain.Enums.PriceLevel priceLevel)
         {
-            PriceLevel priceLevelEntity = await _dbContext.PriceLevels.GetFirstOrThrowExceptionAsync(pl => pl.Level == priceLevel);
+            Domain.Entities.PriceLevel priceLevelEntity = await _dbContext.PriceLevels.GetFirstOrThrowExceptionAsync(pl => pl.Level == priceLevel);
             return priceLevelEntity;
         }
     }

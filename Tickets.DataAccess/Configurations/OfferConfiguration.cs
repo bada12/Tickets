@@ -24,11 +24,11 @@ namespace Tickets.DataAccess.Configurations
 
             builder.ToTable(_ =>
                 _.HasCheckConstraint("CK_Status", @$"[Status] IN (
-                    N'{OfferStatusEnum.Created}'
-                    ,N'{OfferStatusEnum.Sent}'
-                    ,N'{OfferStatusEnum.Paid}'
-                    ,N'{OfferStatusEnum.Declined}'
-                    ,N'{OfferStatusEnum.Failed}'
+                    N'{OfferStatus.Created}'
+                    ,N'{OfferStatus.Sent}'
+                    ,N'{OfferStatus.Paid}'
+                    ,N'{OfferStatus.Declined}'
+                    ,N'{OfferStatus.Failed}'
                 )")
             );
         }

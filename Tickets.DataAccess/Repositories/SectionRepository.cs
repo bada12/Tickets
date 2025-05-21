@@ -16,7 +16,7 @@ namespace Tickets.DataAccess.Repositories
                 throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task<Paged<Section>> GetAsync(Guid venueId, int pageIndex, int pageSize)
+        public async Task<Paged<Section>> GetAsync(Guid venueId, int? pageIndex, int? pageSize)
         {
             Paged<Section> sections = await _dbContext.Sections
                 .AsNoTracking()
@@ -26,7 +26,7 @@ namespace Tickets.DataAccess.Repositories
             return sections;
         }
 
-        public async Task<Paged<Seat>> GetSeatsAsync(Guid sectionId, int pageIndex, int pageSize)
+        public async Task<Paged<Seat>> GetSeatsAsync(Guid sectionId, int? pageIndex, int? pageSize)
         {
             Paged<Seat> seats = await _dbContext.Seats
                 .AsNoTracking()

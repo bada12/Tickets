@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tickets.API.Models;
+using Tickets.API.Services;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Enums;
 using Tickets.Domain.Interfaces;
@@ -10,25 +12,35 @@ namespace Tickets.API.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IOfferRepository _offerRepository;
+        private readonly IValidatorService _validatorService;
 
-        public PaymentsController(IOfferRepository offerRepository)
+        public PaymentsController(
+            IOfferRepository offerRepository,
+            IValidatorService validatorService)
         {
             _offerRepository = offerRepository ??
                 throw new ArgumentNullException(nameof(offerRepository));
+
+            _validatorService = validatorService ??
+                throw new ArgumentNullException(nameof(validatorService));
         }
 
         [HttpGet("{paymentId}")]
-        public async Task<OfferStatusEnum> GetPaymentStatusAsync(Guid paymentId)
+        public async Task<OfferStatus> GetPaymentStatusAsync(PaymentInput input)
         {
-            Offer offer = await _offerRepository.GetAsync(paymentId);
+            await _validatorService.ValidateAsync(input);
+
+            Offer offer = await _offerRepository.GetAsync(input.PaymentId);
 
             return offer.Status;
         }
 
         [HttpPost("{paymentId}/complete")]
-        public async Task<OfferStatusEnum> CompletePaymentAsync(Guid paymentId)
+        public async Task<OfferStatus> CompletePaymentAsync(PaymentInput input)
         {
-            Offer offer = await _offerRepository.GetAsync(paymentId);
+            await _validatorService.ValidateAsync(input);
+
+            Offer offer = await _offerRepository.GetAsync(input.PaymentId);
 
             offer.CompletePayment();
 
@@ -38,9 +50,11 @@ namespace Tickets.API.Controllers
         }
 
         [HttpPost("{paymentId}/fail")]
-        public async Task<OfferStatusEnum> FailPaymentAsync(Guid paymentId)
+        public async Task<OfferStatus> FailPaymentAsync(PaymentInput input)
         {
-            Offer offer = await _offerRepository.GetAsync(paymentId);
+            await _validatorService.ValidateAsync(input);
+
+            Offer offer = await _offerRepository.GetAsync(input.PaymentId);
 
             offer.FailPayment();
 

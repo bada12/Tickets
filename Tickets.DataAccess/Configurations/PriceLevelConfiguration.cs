@@ -5,9 +5,9 @@ using Tickets.Domain.Enums;
 
 namespace Tickets.DataAccess.Configurations
 {
-    internal class PriceLevelConfiguration : IEntityTypeConfiguration<PriceLevel>
+    internal class PriceLevelConfiguration : IEntityTypeConfiguration<Domain.Entities.PriceLevel>
     {
-        public void Configure(EntityTypeBuilder<PriceLevel> builder)
+        public void Configure(EntityTypeBuilder<Domain.Entities.PriceLevel> builder)
         {
             builder.HasKey(pl => pl.Level);
 
@@ -19,9 +19,9 @@ namespace Tickets.DataAccess.Configurations
 
             builder.ToTable(_ =>
                 _.HasCheckConstraint("CK_Level", @$"[Level] IN (
-                    N'{PriceLevelEnum.Adult}'
-                    ,N'{PriceLevelEnum.Child}'
-                    ,N'{PriceLevelEnum.VIP}'
+                    N'{Domain.Enums.PriceLevel.Adult}'
+                    ,N'{Domain.Enums.PriceLevel.Child}'
+                    ,N'{Domain.Enums.PriceLevel.VIP}'
                 )")
             );
         }

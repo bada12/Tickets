@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tickets.API.Models;
+using Tickets.API.Services;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;
 
@@ -11,43 +12,49 @@ namespace Tickets.API.Controllers
     {
         private readonly IOfferRepository _offerRepository;
         private readonly ISeatRepository _seatRepository;
+        private readonly IValidatorService _validatorService;
 
         public CartsController(
             IOfferRepository offerRepository,
-            ISeatRepository seatRepository)
+            ISeatRepository seatRepository,
+            IValidatorService validatorService)
         {
             _offerRepository = offerRepository ??
                 throw new ArgumentNullException(nameof(offerRepository));
 
             _seatRepository = seatRepository ??
                 throw new ArgumentNullException(nameof(seatRepository));
+
+            _validatorService = validatorService ??
+                throw new ArgumentNullException(nameof(validatorService));
         }
 
         [HttpGet("{cartId}")]
-        public async Task<Offer> GetCartAsync(Guid cartId)
+        public async Task<Offer> GetCartAsync(GetCartInput input)
         {
-            return await _offerRepository.GetAsync(cartId);
+            await _validatorService.ValidateAsync(input);
+            return await _offerRepository.GetAsync(input.CartId);
         }
 
         [HttpPost("{cartId}")]
-        public async Task<Offer> AddSeatToCartAsync(
-            Guid cartId,
-            [FromBody] SeatInput seatInput)
+        public async Task<Offer> AddSeatToCartAsync(AddSeatToCartInput input)
         {
-            Offer offer = await _offerRepository.GetAsync(cartId);
-            Seat seat = await _seatRepository.GetAsync(seatInput.SeatId);
+            await _validatorService.ValidateAsync(input);
+
+            Offer offer = await _offerRepository.GetAsync(input.CartId);
+            Seat seat = await _seatRepository.GetAsync(input.SeatInput.SeatId);
 
             if (offer is null)
             {
                 offer = new Offer(
-                    cartId,
-                    userId: seatInput.UserId,
+                    input.CartId,
+                    userId: input.SeatInput.UserId,
                     timestamp: DateTime.UtcNow);
 
                 offer = await _offerRepository.CreateAsync(offer);
             }
 
-            PriceLevel priceLevel = await _seatRepository.GetPriceLevelAsync(seatInput.PriceLevel);
+            PriceLevel priceLevel = await _seatRepository.GetPriceLevelAsync(input.SeatInput.PriceLevel);
 
             offer.AddSeat(seat, priceLevel);
 
@@ -57,21 +64,23 @@ namespace Tickets.API.Controllers
 
         [HttpDelete("{cartId}/events/{eventId}/seats/{seatId}")]
         public async Task DeleteSeatFromCartAsync(
-            Guid cartId,
-            Guid eventId,
-            Guid seatId)
+            DeleteSeatFromCartInput input)
         {
-            Offer offer = await _offerRepository.GetAsync(cartId);
+            await _validatorService.ValidateAsync(input);
 
-            offer.TryToDeleteSeat(seatId);
+            Offer offer = await _offerRepository.GetAsync(input.CartId);
+
+            offer.TryToDeleteSeat(input.SeatId);
 
             await _offerRepository.UpdateAsync(offer);
         }
 
         [HttpPut("{cartId}/book")]
-        public async Task<Guid> BookSeatsAsync(Guid cartId)
+        public async Task<Guid> BookSeatsAsync(BookSeatsInput input)
         {
-            Offer offer = await _offerRepository.GetAsync(cartId);
+            await _validatorService.ValidateAsync(input);
+
+            Offer offer = await _offerRepository.GetAsync(input.CartId);
 
             offer.BookSeats();
 

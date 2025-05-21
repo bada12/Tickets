@@ -5,6 +5,6 @@ namespace Tickets.API.Models
     public record SeatInput(
         Guid EventId,
         Guid SeatId,
-        PriceLevelEnum PriceLevel,
+        PriceLevel PriceLevel,
         Guid UserId);
 }

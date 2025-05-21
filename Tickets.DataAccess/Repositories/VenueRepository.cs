@@ -15,7 +15,7 @@ namespace Tickets.DataAccess.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task<Paged<Venue>> GetAsync(int pageIndex, int pageSize)
+        public async Task<Paged<Venue>> GetAsync(int? pageIndex, int? pageSize)
         {
             Paged<Venue> venues = await _dbContext.Venues
                 .AsNoTracking()

@@ -6,6 +6,6 @@ namespace Tickets.Domain.Interfaces
     public interface ISeatRepository
     {
         Task<Seat> GetAsync(Guid seatId);
-        Task<PriceLevel> GetPriceLevelAsync(PriceLevelEnum priceLevel);
+        Task<Entities.PriceLevel> GetPriceLevelAsync(Enums.PriceLevel priceLevel);
     }
 }
