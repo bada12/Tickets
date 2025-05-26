@@ -50,6 +50,8 @@ namespace Tickets.Domain.Entities
             {
                 seat.Book();
             }
+
+            Status = OfferStatus.Sent;
         }
 
         public void AddSeat(

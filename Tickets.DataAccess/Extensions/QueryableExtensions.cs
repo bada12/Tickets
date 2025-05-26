@@ -20,7 +20,7 @@ namespace Tickets.DataAccess.Extensions
             pageSize ??= DefaultPageSize;
 
             int totalCount = await query.CountAsync();
-            IEnumerable<TEntity> entities = await query.Skip((pageIndex.Value - 1) * pageSize.Value).ToListAsync();
+            IEnumerable<TEntity> entities = await query.Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
 
             Paged<TEntity> paged = Paged<TEntity>.Create(
                 pageIndex.Value,

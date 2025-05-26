@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tickets.DataAccess.Extensions;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;
@@ -24,11 +23,6 @@ namespace Tickets.DataAccess.Repositories
             return createdUser.Entity;
         }
 
-        public async Task DeleteAsync(Guid userId)
-        {
-            await _dbContext.Users.Where(u => u.Id == userId).ExecuteDeleteAsync();
-        }
-
         public async Task<User> GetByEmailAsync(string email)
         {
             User user = await _dbContext.Users.GetFirstOrThrowExceptionAsync(u => u.Email == email);
@@ -39,14 +33,6 @@ namespace Tickets.DataAccess.Repositories
         {
             User user = await _dbContext.Users.GetFirstOrThrowExceptionAsync(u => u.Username == username);
             return user;
-        }
-
-        public async Task<User> UpdateAsync(User user)
-        {
-            EntityEntry<User> updatedUser = _dbContext.Users.Update(user);
-            await _dbContext.SaveChangesAsync();
-
-            return updatedUser.Entity;
         }
     }
 }
