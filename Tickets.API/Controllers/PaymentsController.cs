@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tickets.API.Models;
-using Tickets.API.Services;
+using Tickets.API.Services.Interfaces;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Enums;
 using Tickets.Domain.Interfaces;

@@ -1,20 +1,18 @@
 ﻿namespace Tickets.Domain.Entities
 {
-    public class Event
+    public class Event : EntityBase
     {
         public Event(
             Guid id,
             string name,
             Guid createdBy,
             DateTime startTime)
+            : base(id)
         {
-            Id = id;
             Name = name;
             CreatedBy = createdBy;
             StartTime = startTime;
         }
-
-        public Guid Id { get; private set; }
 
         public string Name { get; private set; }
 

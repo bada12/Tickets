@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tickets.API.Models;
-using Tickets.API.Services;
+using Tickets.API.Services.Interfaces;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;
 
@@ -13,11 +13,13 @@ namespace Tickets.API.Controllers
         private readonly IOfferRepository _offerRepository;
         private readonly ISeatRepository _seatRepository;
         private readonly IValidatorService _validatorService;
+        private readonly ICacheService _cacheService;
 
         public CartsController(
             IOfferRepository offerRepository,
             ISeatRepository seatRepository,
-            IValidatorService validatorService)
+            IValidatorService validatorService,
+            ICacheService cacheService)
         {
             _offerRepository = offerRepository ??
                 throw new ArgumentNullException(nameof(offerRepository));
@@ -27,6 +29,9 @@ namespace Tickets.API.Controllers
 
             _validatorService = validatorService ??
                 throw new ArgumentNullException(nameof(validatorService));
+
+            _cacheService = cacheService ??
+                throw new ArgumentNullException(nameof(cacheService));
         }
 
         [HttpGet("{cartId}")]
@@ -59,6 +64,9 @@ namespace Tickets.API.Controllers
             offer.AddSeat(seat, priceLevel);
 
             offer = await _offerRepository.UpdateAsync(offer);
+
+            _cacheService.RemoveList<Event>();
+
             return offer;
         }
 
@@ -73,6 +81,8 @@ namespace Tickets.API.Controllers
             offer.TryToDeleteSeat(input.SeatId);
 
             await _offerRepository.UpdateAsync(offer);
+
+            _cacheService.RemoveList<Event>();
         }
 
         [HttpPut("{cartId}/book")]
@@ -85,6 +95,8 @@ namespace Tickets.API.Controllers
             offer.BookSeats();
 
             offer = await _offerRepository.UpdateAsync(offer);
+
+            _cacheService.RemoveList<Event>();
 
             return offer.Id;
         }

@@ -1,6 +1,7 @@
 ﻿
 using FluentValidation;
 using FluentValidation.Results;
+using Tickets.API.Services.Interfaces;
 
 namespace Tickets.API.Services
 {

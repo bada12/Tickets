@@ -1,7 +1,7 @@
 ﻿using Moq;
 using Tickets.API.Controllers;
 using Tickets.API.Models;
-using Tickets.API.Services;
+using Tickets.API.Services.Interfaces;
 using Tickets.Domain.Common;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;

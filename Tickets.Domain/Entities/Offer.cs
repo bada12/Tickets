@@ -2,19 +2,17 @@
 
 namespace Tickets.Domain.Entities
 {
-    public class Offer
+    public class Offer : EntityBase
     {
         public Offer(
             Guid id,
             Guid userId,
             DateTime timestamp)
+            : base(id)
         {
-            Id = id;
             UserId = userId;
             Timestamp = timestamp;
         }
-
-        public Guid Id { get; private set; }
 
         public Guid UserId { get; private set; }
 

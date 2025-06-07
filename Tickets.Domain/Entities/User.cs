@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Domain.Entities
 {
-    public class User
+    public class User : EntityBase
     {
         public User(
             Guid id,
@@ -9,16 +9,14 @@
             string email,
             string username,
             string password)
+            : base(id)
         {
-            Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Username = username;
             Password = password;
         }
-
-        public Guid Id { get; private set; }
 
         public string FirstName { get; private set; }
 

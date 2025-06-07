@@ -1,20 +1,18 @@
 ﻿namespace Tickets.Domain.Entities
 {
-    public class Venue
+    public class Venue : EntityBase
     {
         public Venue(
             Guid id,
             Guid eventId,
             string spotName,
             string address)
+            : base(id)
         {
-            Id = id;
             EventId = eventId;
             SpotName = spotName;
             Address = address;
         }
-
-        public Guid Id { get; private set; }
 
         public Guid EventId { get; private set; }
 

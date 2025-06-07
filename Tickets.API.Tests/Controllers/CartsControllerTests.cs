@@ -1,7 +1,7 @@
 ﻿using Moq;
 using Tickets.API.Controllers;
 using Tickets.API.Models;
-using Tickets.API.Services;
+using Tickets.API.Services.Interfaces;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;
 using Tickets.Tests.Common;
@@ -13,9 +13,14 @@ namespace Tickets.API.Tests.Controllers
         private readonly Mock<IOfferRepository> _offerRepoMock = new();
         private readonly Mock<ISeatRepository> _seatRepoMock = new();
         private readonly Mock<IValidatorService> _validatorMock = new();
+        private readonly Mock<ICacheService> _cacheService = new();
 
         private CartsController CreateController() =>
-            new CartsController(_offerRepoMock.Object, _seatRepoMock.Object, _validatorMock.Object);
+            new CartsController(
+                _offerRepoMock.Object,
+                _seatRepoMock.Object,
+                _validatorMock.Object,
+                _cacheService.Object);
 
         [Fact]
         public async Task GetCartAsync_ShouldReturnOffer()

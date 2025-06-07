@@ -1,4 +1,4 @@
-﻿namespace Tickets.API.Services
+﻿namespace Tickets.API.Services.Interfaces
 {
     public interface IValidatorService
     {

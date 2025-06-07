@@ -1,7 +1,7 @@
 ﻿using Moq;
 using Tickets.API.Controllers;
 using Tickets.API.Models;
-using Tickets.API.Services;
+using Tickets.API.Services.Interfaces;
 using Tickets.Domain.Common;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Interfaces;
@@ -13,9 +13,14 @@ namespace Tickets.API.Tests.Controllers
         private readonly Mock<IEventRepository> _eventRepoMock = new();
         private readonly Mock<ISectionRepository> _sectionRepoMock = new();
         private readonly Mock<IValidatorService> _validatorMock = new();
+        private readonly Mock<ICacheService> _cacheService = new();
 
         private EventsController CreateController() =>
-            new EventsController(_eventRepoMock.Object, _sectionRepoMock.Object, _validatorMock.Object);
+            new EventsController(
+                _eventRepoMock.Object,
+                _sectionRepoMock.Object,
+                _validatorMock.Object,
+                _cacheService.Object);
 
         [Fact]
         public async Task GetEventsAsync_ValidInput_ReturnsPagedEvents()

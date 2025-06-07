@@ -1,18 +1,16 @@
 ﻿namespace Tickets.Domain.Entities
 {
-    public class Row
+    public class Row : EntityBase
     {
         public Row(
             Guid id,
             int? number,
             Guid sectionId)
+            : base(id)
         {
-            Id = id;
             Number = number;
             SectionId = sectionId;
         }
-
-        public Guid Id { get; private set; }
 
         public int? Number { get; private set; }
 

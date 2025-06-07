@@ -1,18 +1,16 @@
 ﻿namespace Tickets.Domain.Entities
 {
-    public class Section
+    public class Section : EntityBase
     {
         public Section(
             Guid id,
             Guid venueId,
             string name)
+            : base(id)
         {
-            Id = id;
             VenueId = venueId;
             Name = name;
         }
-
-        public Guid Id { get; private set; }
 
         public Guid VenueId { get; private set; }
 

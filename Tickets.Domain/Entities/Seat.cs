@@ -2,23 +2,21 @@
 
 namespace Tickets.Domain.Entities
 {
-    public class Seat
+    public class Seat : EntityBase
     {
         public Seat(
             Guid id,
             int? number,
             Guid? rowId,
             decimal price)
+            : base(id)
         {
-            Id = id;
             Number = number;
             RowId = rowId;
             Price = price;
             PriceLevel = Enums.PriceLevel.Adult;
             Status = SeatStatus.Available;
         }
-
-        public Guid Id { get; private set; }
 
         public int? Number { get; private set; }
 
