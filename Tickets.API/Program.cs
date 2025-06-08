@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tickets.API.ModelsValidators;
 using Tickets.API.Options;
@@ -47,6 +49,25 @@ namespace Tickets.API
             {
                 app.MapOpenApi();
             }
+
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/json";
+
+                    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+
+                    var result = JsonSerializer.Serialize(new
+                    {
+                        message = exceptionHandlerPathFeature?.Error.Message,
+                        statusCode = context.Response.StatusCode
+                    });
+
+                    await context.Response.WriteAsync(result);
+                });
+            });
 
             app.UseHttpsRedirection();
 

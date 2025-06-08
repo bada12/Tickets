@@ -15,7 +15,9 @@ namespace Tickets.DataAccess.Extensions
             services.AddDbContext<TicketsDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("TicketsDb")));
 
+
             services
+                .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IEventRepository, EventRepository>()
                 .AddScoped<IOfferRepository, OfferRepository>()
                 .AddScoped<IUserRepository, UserRepository>()

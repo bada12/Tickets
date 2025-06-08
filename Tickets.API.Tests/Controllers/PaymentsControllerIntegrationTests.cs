@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tickets.DataAccess;
@@ -10,38 +7,26 @@ using Tickets.Tests.Common;
 
 namespace Tickets.API.Tests.Controllers
 {
-    public class PaymentsControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+    public class PaymentsControllerIntegrationTests : IClassFixture<TicketsAPIFactory>
     {
-        private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient _client;
+        private readonly TicketsAPIFactory _ticketsAPIFactory;
 
-        public PaymentsControllerIntegrationTests(WebApplicationFactory<Program> factory)
+        public PaymentsControllerIntegrationTests(TicketsAPIFactory ticketsAPIFactory)
         {
-            _factory = factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureServices(services =>
-                {
-                    services.Remove(
-                        services.SingleOrDefault(d => d.ServiceType == typeof(IDbContextOptionsConfiguration<TicketsDbContext>))
-                     );
-
-                    services.AddDbContext<TicketsDbContext>(options =>
-                    {
-                        options.UseInMemoryDatabase("TestDb");
-                    });
-                });
-            });
-
-            _client = _factory.CreateClient();
+            _ticketsAPIFactory = ticketsAPIFactory;
         }
 
         private async Task SeedOfferAsync(Guid offerId)
         {
-            using var scope = _factory.Services.CreateScope();
+            using var scope = _ticketsAPIFactory.Factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<TicketsDbContext>();
 
-            var offer = ModelCreationHelper.CreateOffer(id: offerId);
+            var user = ModelCreationHelper.CreateUser();
+            var offer = ModelCreationHelper.CreateOffer(id: offerId, userId: user.Id);
+
+            db.Users.Add(user);
             db.Offers.Add(offer);
+
             await db.SaveChangesAsync();
         }
 
@@ -53,7 +38,7 @@ namespace Tickets.API.Tests.Controllers
             await SeedOfferAsync(offerId);
 
             // Act
-            var response = await _client.GetAsync($"/payments/{offerId}");
+            var response = await _ticketsAPIFactory.HttpClient.GetAsync($"/payments/{offerId}");
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -79,7 +64,7 @@ namespace Tickets.API.Tests.Controllers
             request.Content = new StringContent(JsonSerializer.Serialize(new { PaymentId = offerId }), System.Text.Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.SendAsync(request);
+            var response = await _ticketsAPIFactory.HttpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -105,7 +90,7 @@ namespace Tickets.API.Tests.Controllers
             request.Content = new StringContent(JsonSerializer.Serialize(new { PaymentId = offerId }), System.Text.Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.SendAsync(request);
+            var response = await _ticketsAPIFactory.HttpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();

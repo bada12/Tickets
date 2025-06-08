@@ -1,4 +1,6 @@
-﻿using Tickets.Domain.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using Tickets.Domain.Enums;
+using Tickets.Domain.Exceptions;
 
 namespace Tickets.Domain.Entities
 {
@@ -28,6 +30,9 @@ namespace Tickets.Domain.Entities
 
         public ICollection<Seat> Seats { get; private set; } = new List<Seat>();
 
+        [Timestamp]
+        public byte[] Version { get; set; }
+
         public void TryToDeleteSeat(Guid seatId)
         {
             Seat seat = Seats?.SingleOrDefault(s => s.Id == seatId);
@@ -56,8 +61,15 @@ namespace Tickets.Domain.Entities
             Seat seat,
             PriceLevel priceLevel)
         {
+            if (seat.Status is SeatStatus.Booked
+                            or SeatStatus.Purchased)
+            {
+                throw new SeatIsNotAvailableException();
+            }
+
             seat.SetOfferId(Id);
             seat.SetPriceLevel(priceLevel);
+            seat.Book(); // for testing purposes
 
             Seats.Add(seat);
 

@@ -12,6 +12,7 @@ namespace Tickets.API.Tests.Controllers
     {
         private readonly Mock<IOfferRepository> _offerRepoMock = new();
         private readonly Mock<ISeatRepository> _seatRepoMock = new();
+        private readonly Mock<IUnitOfWork> _unitOfWork = new();
         private readonly Mock<IValidatorService> _validatorMock = new();
         private readonly Mock<ICacheService> _cacheService = new();
 
@@ -19,6 +20,7 @@ namespace Tickets.API.Tests.Controllers
             new CartsController(
                 _offerRepoMock.Object,
                 _seatRepoMock.Object,
+                _unitOfWork.Object,
                 _validatorMock.Object,
                 _cacheService.Object);
 

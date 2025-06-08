@@ -24,6 +24,25 @@ namespace Tickets.Tests.Common
             return user;
         }
 
+        public static Manager CreateManager(
+            Guid? id = null,
+            string firstName = null,
+            string lastName = null,
+            string email = null,
+            string username = null,
+            string password = null)
+        {
+            Manager manager = new Manager(
+                id: id ?? Guid.NewGuid(),
+                firstName: firstName ?? $"First name: {Guid.NewGuid()}",
+                lastName: lastName ?? $"Last name: {Guid.NewGuid()}",
+                email: email ?? $"email_{Guid.NewGuid()}@mail.com",
+                username: username ?? $"username: {Guid.NewGuid()}",
+                password: password ?? $"password{Guid.NewGuid()}");
+
+            return manager;
+        }
+
         public static Event CreateEvent(
             Guid? id = null,
             string name = null,
@@ -111,6 +130,9 @@ namespace Tickets.Tests.Common
                 id: id ?? Guid.NewGuid(),
                 userId: userId ?? Guid.NewGuid(),
                 timestamp: timestamp ?? DateTime.UtcNow);
+
+            offer.Version = Guid.NewGuid().ToByteArray();
+
             return offer;
         }
     }
