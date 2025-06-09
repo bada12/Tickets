@@ -40,9 +40,11 @@ namespace Tickets.DataAccess.Tests.Repositories
         {
             var dbContext = DbContextCreationHelper.CreateInMemoryDbContext(nameof(GetAsync_ShouldReturnOfferWithSeats));
             var seat = ModelCreationHelper.CreateSeat();
-            var offer = ModelCreationHelper.CreateOffer();
+            var user = ModelCreationHelper.CreateUser();
+            var offer = ModelCreationHelper.CreateOffer(userId: user.Id);
             offer.AddSeat(seat, ModelCreationHelper.CreatePriceLevel());
 
+            dbContext.Users.Add(user);
             dbContext.Offers.Add(offer);
 
             await dbContext.SaveChangesAsync();

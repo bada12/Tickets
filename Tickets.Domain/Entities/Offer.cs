@@ -33,6 +33,12 @@ namespace Tickets.Domain.Entities
         [Timestamp]
         public byte[] Version { get; set; }
 
+        public decimal CalculatePrice()
+        {
+            decimal price = TotalAmount - (decimal)Discount.GetValueOrDefault();
+            return price;
+        }
+
         public void TryToDeleteSeat(Guid seatId)
         {
             Seat seat = Seats?.SingleOrDefault(s => s.Id == seatId);
@@ -42,6 +48,7 @@ namespace Tickets.Domain.Entities
             }
 
             seat.SetOfferId(null);
+            seat.SetAvailableStatus();
             Seats.Remove(seat);
 
             RecalculateTotalAmount();

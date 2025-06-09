@@ -5,6 +5,7 @@ using Tickets.API.Services.Interfaces;
 using Tickets.Domain.Entities;
 using Tickets.Domain.Enums;
 using Tickets.Domain.Interfaces;
+using Tickets.Infrastructure.MessageBroker.Interfaces;
 
 namespace Tickets.API.Tests.Controllers
 {
@@ -12,9 +13,15 @@ namespace Tickets.API.Tests.Controllers
     {
         private readonly Mock<IOfferRepository> _offerRepoMock = new();
         private readonly Mock<IValidatorService> _validatorMock = new();
+        private readonly Mock<IUnitOfWork> _unitOfWork = new();
+        private readonly Mock<IMessagePublisher> _messagePublisher = new();
 
         private PaymentsController CreateController() =>
-            new PaymentsController(_offerRepoMock.Object, _validatorMock.Object);
+            new PaymentsController(
+                _offerRepoMock.Object,
+                _validatorMock.Object,
+                _unitOfWork.Object,
+                _messagePublisher.Object);
 
         [Fact]
         public async Task GetPaymentStatusAsync_ValidInput_ReturnsOfferStatus()

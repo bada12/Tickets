@@ -7,6 +7,8 @@ using Tickets.API.Options;
 using Tickets.API.Services;
 using Tickets.API.Services.Interfaces;
 using Tickets.DataAccess.Extensions;
+using Tickets.Infrastructure.Extensions;
+using Tickets.Infrastructure.MessageBroker.RabbitMq.Extensions;
 
 namespace Tickets.API
 {
@@ -31,6 +33,9 @@ namespace Tickets.API
             builder.Services.AddSingleton<IValidatorService, ValidatorService>();
 
             builder.Services.AddResponseCaching();
+
+            builder.Services.ConfigureEmailService(builder.Configuration);
+            builder.Services.ConfigureRabbitMq(builder.Configuration);
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>

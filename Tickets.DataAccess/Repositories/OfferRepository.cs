@@ -45,6 +45,7 @@ namespace Tickets.DataAccess.Repositories
         public async Task<Offer> GetAsync(Guid offerId)
         {
             Offer offer = await _dbContext.Offers
+                .Include(o => o.User)
                 .Include(o => o.Seats)
                 .FirstOrDefaultAsync(o => o.Id == offerId);
             return offer;
